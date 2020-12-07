@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>SvelteJS</title>
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="styles/theme.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="styles/dracula.css" id="highlight-theme" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-color="white">
+          <img class="r-stretch" src="images/svelte-logo-horizontal.svg" />
+          <h2>Introduction to Svelte</h2>
+          <div class="container">
+            <div class="row">
+              <div class="column">
+                <p style="color: black">Narayanaperumal Gurusamy</p>
+                <small style="color: #4a4a55">ngurusam@akamai.com</small>
+              </div>
+              <div class="column">
+                <figure>
+                  <img width=150 height=150 src="images/me.png" />
+                </figure>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <section data-transition="zoom">
+            <h2 class="svelte-color">What is Svelte?</h2>
+            <p>
+              Svelte (some might say SvelteJS, but officially just “Svelte”),
+              currently in its third revision, is a front end framework in the
+              same vein as React, Vue.js, or Angular. It’s similar in that it
+              helps you paint pixels on a web page. It’s different in a lot of
+              other ways.
+            </p>
+          </section>
+          <section data-transition="zoom">
+            <h3>History</h3>
+            <ul>
+              <li class="fragment fade-up">First Release: end of 2016</li>
+              <li class="fragment fade-up">
+                Author: Richard Harris, Creator of rollup.js
+              </li>
+              <li class="fragment fade-up">
+                v2- "Magically disappearing framework"
+              </li>
+              <li class="fragment fade-up">
+                v3- "Cybernetically enhanced web apps"
+              </li>
+              <li class="fragment fade-up">Current version 3.X</li>
+            </ul>
+          </section>
+          <section data-transition="zoom">
+            <h3>Svelte is a <span class="svelte-color">Compiler</span></h3>
+            <div class="fragment two-columns">
+              <div>
+                <ul>
+                  <li>*.svelte</li>
+                </ul>
+              </div>
+              <div>
+                <pre
+                  data-id="code-animation"
+                ><code class="hljs" data-trim data-line-numbers="3-5|7-9|11">
+					// Components are the building blocks of Svelte applications.
+					// They are written into .svelte files using a superset of HTML.
+					<script>
+						// logic goes here
+					</script>
+					
+					<style>
+						/* styles go here */
+					</style>
+					
+					<!-- markup (zero or more HTML elements) goes here -->
+				</code></pre>
+              </div>
+            </div>
+            <div class="fragment row">
+              <div class="column">
+                <ul>
+                  <li>Almost No Runtime</li>
+                </ul>
+              </div>
+              <div class="column">No runtime libraries attached.</div>
+            </div>
+            <div class="fragment row">
+              <div class="column">
+                <ul>
+                  <li>Deadcode Elimination</li>
+                </ul>
+              </div>
+              <div class="column">
+                <img
+                  width="200"
+                  src="https://media.slid.es/uploads/1003063/images/6900763/pasted-from-clipboard.png"
+                />
+                <img
+                  width="200"
+                  src="https://media.slid.es/uploads/1003063/images/6900768/pasted-from-clipboard.png"
+                />
+              </div>
+            </div>
+            <div class="fragment row">
+              <div class="column">
+                <ul>
+                  <li>Bare minimum A11Y</li>
+                </ul>
+              </div>
+              <div class="column">
+                <img
+                  width="250"
+                  src="https://media.slid.es/uploads/1003063/images/6900776/pasted-from-clipboard.png"
+                />
+              </div>
+            </div>
+          </section>
+          <section>
+            <h3>compiler output readable</h3>
+            <pre>
+				<code class="hljs" data-trim data-line-numbers="2-8|59-15">
+					{
+						c() {
+						  h1 = element("h1");
+						  t0 = text("Hello ");
+						  t1 = text(name);
+						  t4 = space();
+						  img = element("img");
+						},
+						m(target, anchor) {
+						  insert(target, h1, anchor);
+						  append(h1, t0);
+						  append(h1, t1);
+						  insert(target, t4, anchor);
+						  insert(target, img, anchor);
+						}
+					};
+				</code>
+			  </pre>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ## The Virtual DOM (React & Vue)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Svelte Hype
+              - Svelte is Fast <!-- .element: class="fragment fade-up" -->
+              	- The execution time is fast because Svelte surgically updates only the parts of the DOM that change. In contrast to React, Vue.js, and other Virtual DOM frameworks, Svelte doesn’t use a virtual DOM.
+            </script>
+          </section>
+        </section>
+        <section>
+          <h3>How it works</h3>
+          <ul>
+            <li class="fragment fade-up">
+              Compiler: Doesn't ship a Svelte "library" to users, but build-time
+              optimized plain JS
+            </li>
+            <li class="fragment fade-up">
+              Components: App is made up of composable UI elements
+            </li>
+            <li class="fragment fade-up">
+              Reactive: Event/User interaction triggers chain of state changes,
+              auto-updating components throughout the entire app
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/how-it-works.png" />
+        </section>
+        <section>
+          <h3>UI Is a Component Tree</h3>
+          <small>
+            A component defines how your app should interpret some abstract
+            "state" values, so that it can turn them into DOM elements in your
+            browser, and ultimately pixels on your screen.
+          </small>
+          <img class="fragment fade-up" src="images/ui-tree.png" />
+        </section>
+        <section>
+          <h3>The Anatomy of a Svelte Component</h3>
+          <img class="fragment fade-up" src="images/anotomy.png" />
+        </section>
+        <section>
+          <h3>The Svelte Template</h3>
+          <p>
+            The Svelte template allows us to use our own custom components in
+            addition to HTML elements. The .svelte file extension is optional if
+            there's no ambiguity, but the first letter of a custom component
+            MUST be in uppercase. We can use JS expressions inside curly braces
+            <b class="svelte-color">{ }</b>.
+          </p>
+          <img class="fragment fade-up" src="images/svelte-templates.png" />
+        </section>
+        <section>
+          <h3>The "Props"</h3>
+          <ul style="font-size: 20px">
+            <li>
+              A common way to "control" how a child component behaves is to pass
+              data into it as props (properties).
+            </li>
+
+            <li>
+              To accept a prop, expose a variable with export. It's important to
+              use let because const is not reassignable.
+            </li>
+
+            <li>Setting a prop is just like doing regular HTML.</li>
+          </ul>
+          <img class="fragment fade-up" src="images/svelte-templates.png" />
+        </section>
+        <section>
+          <h3>Updating Component States</h3>
+          <ul>
+            <li>
+              User actions trigger events. <b class="svelte-color">on:</b> lets
+              us listen to events and fire functions to update states. State
+              changes will auto-update the UI.
+            </li>
+
+            <li>
+              Data generally flows from a parent to a child, but we can use
+              <b class="svelte-color">bind:</b> to simplify the state-update
+              logic by allowing two-way data flow.
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/update.png" />
+        </section>
+        <section>
+          <h3><b class="svelte-color">$:</b> Reactive Statements</h3>
+          <ul>
+            <li>"Reactive statements" are those statements marked by $:.</li>
+
+            <li>
+              Svelte analyzes which variables they depend on. When any of those
+              dependencies changes, the corresponding reactive statements will
+              be rerun. Very useful for declaring derived states, or triggering
+              "side effects".
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/reactive.png" />
+        </section>
+        <section>
+          <h3>Store</h3>
+          <ul>
+            <li>
+              A reactive "store" makes it easy to share states across many
+              components. It can exist in a separate JS file. To create a store,
+              just wrap writable around a value.
+            </li>
+
+            <li>
+              In a component, we prefix store names with a $ in order to
+              directly use or update them. Compiler magic!
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/store.png" />
+        </section>
+        <section>
+          <h3>Conditional Rendering And Lists</h3>
+          <ul>
+            <li>
+              We can conditionally render elements with Svelte's template via
+              <b class="svelte-color">{#if}</b> and optionally
+              <b class="svelte-color">{:else}</b>.
+            </li>
+
+            <li>
+              To render everything in a list, we have
+              <b class="svelte-color">{#each}</b>.
+            </li>
+            <li>
+              Remember to always close a block with
+              <b class="svelte-color">{/if}</b> or
+              <b class="svelte-color">{/each}!</b>
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/render.png" />
+        </section>
+        <section>
+          <h3>Async/Await</h3>
+          <ul style="font-size: 20px">
+            <li>
+              It's super easy to do asynchronous stuff like API requests with
+              Svelte.
+            </li>
+
+            <li>
+              We can simply <b class="svelte-color">{#await}</b> a Promise to
+              resolve, displaying a
+              <em class="svelte-color">"loading"</em> placeholder before the
+              result is ready.
+            </li>
+            <li>
+              Note that we await the Promise in the template section, so no
+              await keyword in <em class="svelte-color">&lt;script&gt;</em>.
+            </li>
+          </ul>
+          <img class="fragment fade-up" src="images/async_await.png" />
+        </section>
+        <section>
+          <section><h1>Demo</h1></section>
+          <section
+            data-background-iframe="https://svelte.dev/repl/59209574d38546a1b526bad3e6af69e1?version=3.6.8"
+            data-background-interactive
+          ></section>
+        </section>
+        <section>
+          <h1>Q&A</h1>
+        </section>
+        <section>
+          <h1>Thank You</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        backgroundTransition: "convex",
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
