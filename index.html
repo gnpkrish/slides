@@ -28,25 +28,21 @@
                 <p style="color: black">Narayanaperumal Gurusamy</p>
                 <small style="color: #4a4a55">ngurusam@akamai.com</small>
               </div>
-              <div class="column">
+              <!-- <div class="column">
                 <figure>
                   <img width=150 height=150 src="images/me.png" />
                 </figure>
-              </div>
+              </div> -->
             </div>
           </div>
         </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## Prerequisites
+            At minimum, it is recommended that you are familiar with the HTML, CSS, and JavaScript languages, and have knowledge of the terminal/command line.
+          </script>
+        </section>
         <section>
-          <section data-transition="zoom">
-            <h2 class="svelte-color">What is Svelte?</h2>
-            <p>
-              Svelte (some might say SvelteJS, but officially just “Svelte”),
-              currently in its third revision, is a front end framework in the
-              same vein as React, Vue.js, or Angular. It’s similar in that it
-              helps you paint pixels on a web page. It’s different in a lot of
-              other ways.
-            </p>
-          </section>
           <section data-transition="zoom">
             <h3>History</h3>
             <ul>
@@ -64,14 +60,68 @@
             </ul>
           </section>
           <section data-transition="zoom">
+            <h2 class="svelte-color">What is Svelte?</h2>
+            <ul>
+              <li class="fragment fade-up">
+                An alternative to web frameworks such as Vue, Angular, and React
+              </li>
+              <li class="fragment fade-up">
+                A web application compiler, not a runtime library
+              </li>
+              <li class="fragment fade-up">
+                Being a compiler, we can't just add a
+                <b class="svelte-color">&lt;script src="svelte.js"&gt;</b> tag
+                to our page and import it into our app.
+              </li>
+              <li class="fragment fade-up">Does not use a virtual DOM</li>
+              <li class="fragment fade-up">
+                Svelte takes inspiration from reactive programming in the way it
+                runs code.
+              </li>
+            </ul>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              # Reactive Programming
+              - what is reactive programming?
+              	- To make it short, reactive programming has key similarities with the observer pattern commonly used in OOP.
+
+              	![Observer pattern](images/observer_pattern.jpg) <!-- .element: height="370" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### Reactive Programming Cont...
+              > When we make a change in a cell, all the cells that depend on it, change too.
+              > This makes the spreadsheet so intuitive. This is what Svelte does by default; it brings reactivity to JavaScript itself.
+
+              ![Reactive Sheet](images/reactive_sheet.png) <!-- .element: height="370" -->
+            </script>
+          </section>
+          <section>
+            <h2>Virtual DOM</h2>
+            <ul>
+              <li class="fragment fade-up">
+                React/Vue uses a virtual DOM to interpret the application code
+                during runtime.
+              </li>
+            </ul>
+            <blockquote class="fragment fade-up">
+              It bundles a certain amount of overhead code, which will run in
+              the browser’s JavaScript engine to monitor and update the DOM. The
+              virtual DOM watches for any changes and calculates the best
+              possible method to make these changes to the real DOM.
+            </blockquote>
+          </section>
+          <section data-transition="zoom">
             <h3>Svelte is a <span class="svelte-color">Compiler</span></h3>
-            <div class="fragment two-columns">
-              <div>
+            <div class="fragment row">
+              <div class="column left-aligned">
                 <ul>
                   <li>*.svelte</li>
                 </ul>
               </div>
-              <div>
+              <div class="column">
                 <pre
                   data-id="code-animation"
                 ><code class="hljs" data-trim data-line-numbers="3-5|7-9|11">
@@ -90,7 +140,7 @@
               </div>
             </div>
             <div class="fragment row">
-              <div class="column">
+              <div class="column left-aligned">
                 <ul>
                   <li>Almost No Runtime</li>
                 </ul>
@@ -98,7 +148,7 @@
               <div class="column">No runtime libraries attached.</div>
             </div>
             <div class="fragment row">
-              <div class="column">
+              <div class="column left-aligned">
                 <ul>
                   <li>Deadcode Elimination</li>
                 </ul>
@@ -115,7 +165,7 @@
               </div>
             </div>
             <div class="fragment row">
-              <div class="column">
+              <div class="column left-aligned">
                 <ul>
                   <li>Bare minimum A11Y</li>
                 </ul>
@@ -151,18 +201,19 @@
 				</code>
 			  </pre>
           </section>
-          <section data-markdown>
-            <script type="text/template">
-              ## The Virtual DOM (React & Vue)
-            </script>
-          </section>
-          <section data-markdown>
-            <script type="text/template">
-              ## Svelte Hype
-              - Svelte is Fast <!-- .element: class="fragment fade-up" -->
-              	- The execution time is fast because Svelte surgically updates only the parts of the DOM that change. In contrast to React, Vue.js, and other Virtual DOM frameworks, Svelte doesn’t use a virtual DOM.
-            </script>
-          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            # Why Svelte?
+            - Svelte is Fast <!-- .element: class="fragment fade-up" -->
+            	- The execution time is fast because Svelte surgically updates only the parts of the DOM that change. In contrast to React, Vue.js, and other Virtual DOM frameworks, Svelte doesn’t use a virtual DOM. <!-- .element: class="fragment fade-up" -->
+            - Svelte is Small <!-- .element: class="fragment fade-up" -->
+            	- When a Svelte app is compiled, the resulting bundle size is tiny compared to most other popular frameworks. <!-- .element: class="fragment fade-up" -->
+            - Svelte is Compiled <!-- .element: class="fragment fade-up" -->
+            	- The reason Svelte apps are so tiny is because Svelte, in addition to being a framework, is also a compiler. <!-- .element: class="fragment fade-up" -->
+            - Svelte is Reactive <!-- .element: class="fragment fade-up" -->
+            	- When you reassign a variable, Svelte will re-render the parts of the template that use it. <!-- .element: class="fragment fade-up" -->
+          </script>
         </section>
         <section>
           <h3>How it works</h3>
@@ -224,7 +275,7 @@
         </section>
         <section>
           <h3>Updating Component States</h3>
-          <ul>
+          <ul style="font-size: 20px">
             <li>
               User actions trigger events. <b class="svelte-color">on:</b> lets
               us listen to events and fire functions to update states. State
@@ -242,7 +293,10 @@
         <section>
           <h3><b class="svelte-color">$:</b> Reactive Statements</h3>
           <ul>
-            <li>"Reactive statements" are those statements marked by $:.</li>
+            <li>
+              "Reactive statements" are those statements marked by
+              <b class="svelte-color">$:</b>.
+            </li>
 
             <li>
               Svelte analyzes which variables they depend on. When any of those
