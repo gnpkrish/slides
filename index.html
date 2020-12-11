@@ -99,19 +99,24 @@
             </script>
           </section>
           <section>
-            <h2>Virtual DOM</h2>
+            <h2>Virtual DOM vs. Svelte</h2>
             <ul>
               <li class="fragment fade-up">
                 React/Vue uses a virtual DOM to interpret the application code
                 during runtime.
               </li>
             </ul>
-            <blockquote class="fragment fade-up">
+            <blockquote style="font-size: 16px" class="fragment fade-up">
               It bundles a certain amount of overhead code, which will run in
               the browser’s JavaScript engine to monitor and update the DOM. The
               virtual DOM watches for any changes and calculates the best
               possible method to make these changes to the real DOM.
             </blockquote>
+            <img
+              height="400"
+              class="fragment fade-up"
+              src="images/vdom_vs_svelte.png"
+            />
           </section>
           <section data-transition="zoom">
             <h3>Svelte is a <span class="svelte-color">Compiler</span></h3>
@@ -371,6 +376,125 @@
             data-background-iframe="https://svelte.dev/repl/59209574d38546a1b526bad3e6af69e1?version=3.6.8"
             data-background-interactive
           ></section>
+        </section>
+        <section>
+          <section>
+            <h2>Advantages</h2>
+            <ul>
+              <li class="fragment fade-up">Ease of use</li>
+              <ul>
+                <li class="fragment fade-up">
+                  Svelte is simpler to understand and get started with, as the
+                  major portion of Svelte is plain JavaScript, HTML , and CSS.
+                  Whereas in react we have to learn things like JSX and
+                  CSS-in-JS to build the most basic applications
+                </li>
+              </ul>
+              <li class="fragment fade-up">Write less code</li>
+              <ul>
+                <li class="fragment fade-up">
+                  While less code doesn’t always mean better, more functional
+                  code, a strong point for Svelte is how much less code you have
+                  to write compared to React.
+                </li>
+              </ul>
+            </ul>
+            <div class="container fragment fade-up">
+              <div class="row">
+                <div class="col-6">
+                  <pre><code data-trim>
+                  <script>
+                    let a = 1;
+                    let b = 2;
+                  </script>
+                  
+                  <input type="number" bind:value={a}>
+                  <input type="number" bind:value={b}>
+                  
+                  <p>{a} + {b} = {a + b}</p>
+                    </code></pre>
+                </div>
+                <div class="col-6">
+                  <pre><code data-trim>
+                  import React, { useState } from 'react';
+                  export default () => {
+                    const [a, setA] = useState(1);
+                    const [b, setB] = useState(2);
+
+                    function handleChangeA(event) {
+                      setA(+event.target.value);
+                    }
+                    function handleChangeB(event) {
+                      setB(+event.target.value);
+                    }
+
+                    return (
+                      <div>
+                        <input type="number" value={a} onChange={handleChangeA}/>
+                        <input type="number" value={b} onChange={handleChangeB}/>
+                        <p>{a} + {b} = {a + b}</p>
+                      </div>
+                    );
+                  };
+                </code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Cont...</h2>
+            <ul>
+              <li class="fragment fade-up">
+                Scoped styling instead of CSS in JS.
+              </li>
+              <li class="fragment fade-up">
+                Brilliant way of working with reactive variables – simply
+                prepending a line with <b class="svelte-color">“$:"</b> will
+                turn your variable into a reactive one that automatically
+                updates should its value be influenced by other changes.
+              </li>
+              <li class="fragment fade-up">
+                No virtual DOM – since the app compiles to vanilla JS, it is
+                fast and immediately so.
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h2>Disadvantages</h2>
+          <blockquote>
+            Svelte’s upsides are compelling to us, but we also need to
+            understand its downsides.
+          </blockquote>
+          <ul>
+            <li>using Svelte means adopting a new language</li>
+            <li>immature tools</li>
+            <li>best practices are still evolving</li>
+            <li>young library ecosystem</li>
+            <li>Limited number of editor extensions, syntax highlighters, component kits, devtools</li>
+            <li>No support for first-class TypeScript</li>
+            <li>it’s a volunteer effort</li>
+          </ul>
+          <aside class="notes">
+            <ul>
+              <li>
+                Peripheral tooling is a work in progress.Svelte is its own
+                language, not plain JS, so it needs specialized tooling.
+              </li>
+              <li>Libraries are fewer in number and generally less mature.</li>
+              <li>There’s no full-time team supporting Svelte — its developers are part-time volunteers.</li>
+            </ul>
+          </aside>
+        </section>
+        <section>
+          <h2>Should I invest my time in Svelte?</h2>
+          <aside class="notes">
+            With all that said, there is one more question that might have already occurred to you: isn’t that all just a little bit too perfect? Well, the truth is that being a fairly new framework, Svelte’s ecosystem is still maturing, which may prove troublesome for large projects. As of today, Svelte-generated code is also not compatible with Internet Explorer 11 (requires quite a lot of polyfills in order to run the app in IE 11 and older versions of the browser).
+
+But since it can be used in conjunction with other frameworks, there is no need for you to give up on other choices. Who knows, perhaps in time the decision to invest some effort in Svelte will prove extremely beneficial for your development team? With little risk involved, there is no hurt in trying.
+
+The Software House has also already tested the new framework, having used it for an internal project of a game app called TypeRunner.js – a simple typing game which has 2-4 users compete against each other in real time. The backend for this simple game was based on Node.js. And if you find Svelte to be interesting, you should also put some effort into developing a simple Svelte-based project on your own. It is by far the best way to get enough confidence to actually use it in a serious commercial work.
+          </aside>
         </section>
         <section>
           <h1>Q&A</h1>
