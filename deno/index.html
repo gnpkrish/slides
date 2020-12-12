@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Deno</title>
+
+    <link rel="stylesheet" href="../reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="../reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="styles/theme.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="styles/dracula.css" id="highlight-theme" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-color="white">
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <img width="300" src="images/deno_logo.png" />
+                <h2>Say hello to deno!</h2>
+              </div>
+              <div class="col-6 vertical-middle pad-left50">
+                <p style="color: black">Narayanaperumal Gurusamy</p>
+                <small style="color: #4a4a55">ngurusam@akamai.com</small>
+                <!-- <figure>
+                  <img width=150 height=150 src="images/me.png" />
+                </figure> -->
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>What is Deno?</h2>
+          <ul>
+            <li class="fragment fade-up">
+              Deno is a simple, modern, and secure runtime for JavaScript and
+              TypeScript. Deno works in the V8 Chromium Engine and is built in
+              Rust programming language.
+            </li>
+            <li class="fragment fade-up">
+              Deno is created by the author of Node.js [Ryan Dahl.]
+            </li>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h2>Main features of Deno</h2>
+            <ul>
+              <li class="fragment fade-up">
+                Deno is secure by default. It has no file, network, or
+                environment access unless explicitly enabled.
+              </li>
+              <li class="fragment fade-up">
+                It supports TypeScript out of the box. But can run both
+                TypeScript (.ts) files, or JavaScript (.js) files.
+              </li>
+              <li class="fragment fade-up">
+                It ships only a single executable file. Given a URL to a Deno
+                program, it is runnable with nothing more than the
+                <a
+                  class="deno-color"
+                  target="_blank"
+                  href="https://github.com/denoland/deno/releases"
+                  >~15 megabytes zipped executable.</a
+                >
+              </li>
+              <li class="fragment fade-up">
+                It explicitly takes on the role of both runtime and package
+                manager. It uses a standard browser-compatible protocol for
+                loading modules: URLs.
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Cont...</h2>
+            <ul>
+              <li class="fragment fade-up">
+                It has a set of reviewed
+                <a
+                  class="deno-color"
+                  href="http://deno.land/std"
+                  target="_blank"
+                  >standard modules</a
+                >
+                that are guaranteed to work with Deno
+              </li>
+              <li class="fragment fade-up">
+                As Node Deno emphasizes event-driven architecture, providing a
+                set of non-blocking core IO utilities, along with their blocking
+                versions.
+              </li>
+              <li class="fragment fade-up">
+                It provides built-in tooling like unit testing, dependency
+                inspector (deno info), code formatting (deno fmt), and linting
+                to improve the developer experience.
+              </li>
+              <li class="fragment fade-up">
+                It includes browser compatible APIs. APIs are compatible with
+                web standards so you can run in the browser. The code can run on
+                the client as well as the server.
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>how Deno works behind the scenes?</h2>
+            <blockquote>
+              The building blocks of Deno are Rust, Tokio, and V8.
+            </blockquote>
+            <img
+              class="fragment fade-up"
+              src="images/deno_process.jpeg"
+              height="400"
+            />
+            <aside class="notes">
+              <p>
+                We write our code in JavaScript or TypeScript. If we have
+                written in TypeScript, then its complied to convert to
+                JavaScript first, but if our code is in JavaScript, then it
+                completely ignores the compiling process and feeds to V8. Like
+                this Deno, start processing.
+              </p>
+              <p>
+                A process is simply a program in execution. Now Deno uses
+                Rusty_V8, a program written by Deno people. Remember, Deno is
+                written in Rust. But why Rust, unlike Node, which is written in
+                C++, C. They choose Rust because it has really good safety when
+                it comes to memory.
+              </p>
+              <p>
+                Deno process the code and say v8 engine to perform all the
+                Javascript task, but if there is anything beyond JS, then send
+                it to Rust, like access file or set time out. We can think it as
+                the front end of Deno being JavaScript or TypeScript and the
+                back end being rust.
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h3>Rust</h3>
+            <blockquote>
+              Rust is a multi-paradigm programming language focused on
+              performance and safety, especially safe concurrency. Rust is
+              syntactically similar to C++ but provides memory safety without
+              using garbage collection.
+              <a
+                class="deno-color"
+                href="https://github.com/denoland/deno/issues/205"
+                target="_blank"
+              >
+                Read more in this thread.</a
+              >
+            </blockquote>
+            <aside class="notes">
+              <p>
+                The Rust backend is migrated from Go, which served to create the
+                original Deno prototype present in June 2018. Reasons for the
+                switch is due to concerns about double GC. Read more in this
+                thread.
+              </p>
+              <p>
+                Used by, Google OS, Amazon (serverless infra), dropbox, Facebook
+                (blockchain)
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h2>Tokio</h2>
+            <blockquote>
+              Tokio is an event-driven, non-blocking I/O platform for writing
+              asynchronous applications with the Rust programming language.
+            </blockquote>
+            <aside class="notes">
+              <p>
+                So anytime we run code that is not merely JavaScript, anything
+                from the Deno doc, then deno communicates with the Rust backend.
+                For example, once the worker in Tokio finishes a task, it sends
+                it back via the Rusty V8 that communicates with the V8 engine
+                that returns it to JavaScript.
+              </p>
+              <p>For those who are familiar with the structure of node.js:</p>
+              <p>
+                Rust V8 in an equivalent of Node.js bindings that are a part of
+                Node.js. And Tokio library is an equivalent of LIBUv that is
+                asynchronous IO in the node.js language.
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h2>V8</h2>
+            <blockquote>
+              <a class="deno-color" href="https://v8.dev/" target="_blank"
+                >V8</a
+              >
+              is a JavaScript/WebAssembly engine by Google. Written in C++, it
+              is also used most notably in Google Chrome and Node.js.
+            </blockquote>
+          </section>
+          <section>
+            <h2>Package Management</h2>
+            <blockquote>
+              There has been a radical rethink regarding the way package
+              management works in Deno. Rather than relying on a central
+              repository, it is decentralized. Anyone can host a package just
+              like anyone can host any type of file on the web.
+            </blockquote>
+            <div class="container">
+              <div class="row">
+                <div class="col-6">
+                  <pre><code data-trim class="hljs" data-line-numbers="4|12-17">
+                    /**
+                    * local.ts
+                    */
+                    import { add, multiply } from "./arithmetic.ts";
+      
+                    function totalCost(outbound: number, inbound: number, tax: number): number {
+                      return multiply(add(outbound, inbound), tax);
+                    }
+      
+                    console.log(totalCost(19, 31, 1.2));
+                    console.log(totalCost(45, 27, 1.15));
+                    /**
+                    * Output
+                    *
+                    * 60
+                    * 82.8
+                    */
+                  </code></pre>
+                </div>
+                <div class="col-6">
+                  <pre><code data-trim class="hljs" data-line-numbers="4-7|15-20">
+                    /**
+                    * remote.ts
+                    */
+                    import {
+                      add,
+                      multiply,
+                    } from "https://x.nest.land/ramda@0.27.0/source/index.js";
+
+                    function totalCost(outbound: number, inbound: number, tax: number): number {
+                      return multiply(add(outbound, inbound), tax);
+                    }
+
+                    console.log(totalCost(19, 31, 1.2));
+                    console.log(totalCost(45, 27, 1.15));
+                    /**
+                    * Output
+                    *
+                    * 60
+                    * 82.8
+                    */
+                  </code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Summary of Deno Architecture</h2>
+            <ul>
+              <li class="fragment fade-up">
+                The building blocks of Deno are Rust, Tokio, and V8.
+              </li>
+              <li class="fragment fade-up">
+                On the front, we write JavaScript and Typescript. Deno
+                automatically compiles Typescript to JavaScript that is feed to
+                the V8 engine.
+              </li>
+              <li class="fragment fade-up">
+                V8 engine communicates with Rust backend via the Rusty V8.
+              </li>
+              <li class="fragment fade-up">
+                Deno’s backend is written in Rust.
+              </li>
+              <li class="fragment fade-up">
+                And Tokio allows Deno to use a threat pool and workers to do
+                work for us.
+              </li>
+              <li class="fragment fade-up">
+                There has been a radical rethink regarding the way package
+                management works in Deno. Rather than relying on a central
+                repository, it is decentralized.
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h2>Security</h2>
+          <ul>
+            <li class="fragment fade-up">
+              The advantage of Deno is in its security. Deno is written in Rust
+              and it is, by default, secure.
+            </li>
+            <li class="fragment fade-up">
+              All Deno programs are run in a sandbox without access to the disk,
+              network, or ability to spawn subprocesses.
+            </li>
+            <li class="fragment fade-up">
+              To grant the program access, we can use special flags when running
+              the program.
+            </li>
+            <pre class="fragment fade-up">
+              <code data-trim>
+                -A, --allow-all : Allow all permissions
+                --allow-env : Allow environment access
+                --allow-hrtime : Allow high-resolution time measurement.
+                --allow-net=&lt;allow-net&gt; : Allow network access
+                --allow-plugin : Allow loading plugins
+                --allow-read=&lt;allow-read&gt; : Allow file system read access.
+                --allow-run : Allow running subprocesses
+                --allow-write=&lt;allow-write&gt; : Allow file system write access.
+              </code>
+            </pre>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h1>Hands-on Deno</h1>
+          </section>
+          <section>
+            <h2>Get Deno</h2>
+            <ul>
+              <li class="fragment fade-up">
+                The easiest way to install Deno is to use the deno_install
+                scripts. You can do this on Linux or macOS with:
+                <pre><code data-trim class="hljs">curl -fsSL https://deno.land/x/install/install.sh | sh </code></pre>
+              </li>
+              <li class="fragment fade-up">
+                Windows users can leverage Chocolatey:
+                <pre><code data-trim class="hljs">choco install deno</code></pre>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>Simple Example</h3>
+            <blockquote>Deno uses .js and .ts file extensions.</blockquote>
+            <pre><code data-trim>
+              // date_time.js
+
+              console.log(new Date());
+
+              // Let’s run the code:
+              // deno run date_time.js
+
+              // Results:
+              // 2020-07-10T02:20:31.298Z
+            </code></pre>
+            <aside class="notes">
+              <p>
+                hough it will run any JavaScript or TypeScript file regardless
+                of extension
+              </p>
+              <p>
+                Our first example demonstrates how we can safely write a
+                browser-based Deno application, a simple JavaScript program that
+                prints the current date and time.
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h3>args</h3>
+            <pre><code data-trim data-line-numbers="2-6|8-10|11|12|13">
+              // ask_details.ts
+              interface PersonDetails {
+                  name: string;
+                  age: number;
+                  phone: string;
+                }
+                
+                function getDetails(details: any[]): PersonDetails {
+                  return {name: details[0], age: details[1], phone: details[2]};
+                }
+                console.log(getDetails(Deno.args));
+                // deno run ask_details.ts "Narayanaperumal Gurusamy" 10 87780-97665
+                // { name: "Narayanaperumal Gurusamy", age: "10", phone: "87780-97665" }
+            </code></pre>
+            <aside class="notes">
+              <p>
+                Deno supports both JavaScript and TypeScript as its first-class
+                languages, allowing you to leverage TypeScript source code
+                directly in your Deno program without needing to first transpile
+                to JavaScript.
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h3>Http Server</h3>
+            <pre><code data-trim data-line-numbers="2|4|6|8-10">
+              // http_server.js
+              import { serve } from "https://deno.land/std/http/server.ts";
+
+              const server = serve({ port: 5000 });
+
+              console.log("Listening to port 5000 on http://localhost:5000");
+
+              for await (const server_request of server) {
+                server_request.respond({ body: "Deno server created\n" });
+              }
+
+              // deno run --allow-net http_server.js
+            </code></pre>
+            <aside class="notes">
+              <ul>
+                <li>Imports a module from the HTTP remote package.</li>
+                <li>
+                  Uses serve() method to create the server that listens on port
+                  5000.
+                </li>
+                <li>
+                  Loops through a promise to send the string "Deno server
+                  created\n" whenever any request is made to port 5000.
+                </li>
+              </ul>
+            </aside>
+          </section>
+          <section>
+            <h3>Reading from a File</h3>
+            <ul>
+              <li class="fragment fade-up">
+                Deno's runtime API provides the
+                <b class="deno-color">Deno.readTextFile</b> and
+                <b class="deno-color">Deno.writeTextFile</b> asynchronous
+                functions for reading and writing entire text files.
+              </li>
+              <li class="fragment fade-up">
+                Like many of Deno's APIs, synchronous alternatives are also
+                available. See
+                <b class="deno-color">Deno.readTextFileSync</b> and
+                <b class="deno-color">Deno.writeTextFileSync.</b>
+              </li>
+              <li class="fragment fade-up">
+                Use --allow-read and --allow-write permissions to gain access to
+                the file system.
+              </li>
+            </ul>
+            <pre
+              class="fragment fade-up"
+            ><code data-trim data-line-numbers="2|4">
+              // open file an returns Promise
+              const text = Deno.readTextFile("./sample.txt");
+
+              text.then((response) => console.log(response));
+            </code></pre>
+          </section>
+          <section>
+            <h3>Writing to a File</h3>
+            <pre><code data-trim data-line-numbers="4|6">
+              /**
+              * write.ts
+              */
+              const write = Deno.writeTextFile("./hello.txt", "Hello World!");
+
+              write.then(() => console.log("File written to ./hello.txt"));
+
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <h2>Tools</h2>
+          <blockquote>
+            Deno’s tools are new and some are rudimentary, but a documented
+            “standard” approach has benefits.
+          </blockquote>
+          <ul>
+            <li>REPL</li>
+            <li>Dependency Inspector</li>
+            <li>Linter</li>
+            <li>Test Runner</li>
+            <li>V8 Debugger</li>
+            <li>Code Formatter</li>
+            <li>Documentation Generator</li>
+            <li>Script Bundling</li>
+          </ul>
+          <aside class="notes">
+            <ul>
+              <li>
+                Like Node.js, a REPL expression evaluation console can be
+                accessed by entering deno in your terminal. Each expression you
+                enter returns a result or undefined:
+              </li>
+              <li>
+                A tree of all module dependencies can be viewed by entering deno
+                info &lt;module&gt; where &lt;module&gt; is the path/URL to an
+                entry script.
+              </li>
+              <li>
+                Deno provides a linter to validate JavaScript and TypeScript
+                code. This is an unstable feature which requires the --unstable
+                flag, but no files will be altered when it’s used.
+              </li>
+              <li>
+                Deno has a built-in test runner for unit-testing JavaScript or
+                TypeScript functions.
+              </li>
+              <li>
+                Deno provides the same V8 engine and debugger as Node.js. It’s
+                possible to attach to the debugger using the Chrome browser or
+                VS Code, then step through code to view variable and object
+                changes.
+              </li>
+              <li>
+                The built-in code formatter auto-formats JavaScript and
+                TypeScript code in a similar way to Prettier. Deno’s formatter
+                is also opinionated and it’s not currently possible to configure
+                options.
+              </li>
+              <li>
+                Deno can generate documentation from JSDoc comments in the
+                source code, which explain a function’s purpose, parameters, and
+                return value. Currently, Deno will only generate documentation
+                for modules which export functions.
+              </li>
+            </ul>
+          </aside>
+        </section>
+        <section>
+          <h1>Q&A</h1>
+        </section>
+        <section>
+          <h1>Thanks you</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="../reveal.js/dist/reveal.js"></script>
+    <script src="../reveal.js/plugin/notes/notes.js"></script>
+    <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="../reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        backgroundTransition: "convex",
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>

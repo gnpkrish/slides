@@ -33,7 +33,7 @@ section.has-light-background h6 {
   --block-margin: 20px;
   --heading-margin: 0 0 20px 0;
   --heading-font: "Nerko One", sans-serif;
-  --heading-color: #ff3e00;
+  --heading-color: #478D57;
   --heading-line-height: 1.2;
   --heading-letter-spacing: normal;
   --heading-text-transform: uppercase;
@@ -85,7 +85,7 @@ section.has-light-background h6 {
   font-weight: inherit;
 }
 
-.reveal .svelte-color {
+.reveal .deno-color {
   color: var(--heading-color);
 }
 /*********************************************
@@ -423,7 +423,10 @@ section.has-light-background h4 {
   text-align: center !important;
 }
 .vertical-middle {
-  vertical-align: middle !important;
+  align-self: center;
+}
+.pad-left50{
+  padding-left:50px;
 }
 .column {
   text-align: center;
