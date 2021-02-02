@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Spire</title>
+
+    <link rel="stylesheet" href="../reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="../reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="styles/theme.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="styles/dracula.css" id="highlight-theme" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-color="white">
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <img width="300" src="images/spire-logo.png" />
+                <h2>Spire</h2>
+              </div>
+              <div class="col-6 vertical-middle pad-left50">
+                <p style="color: #beda18">Narayanaperumal Gurusamy</p>
+                <small style="color: #04bed9">ngurusam@akamai.com</small>
+                <!-- <figure>
+                  <img width=150 height=150 src="images/me.png" />
+                </figure> -->
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <img src="images/spiffe.jpeg" />
+        </section>
+        <section>
+          <div class="row">
+            <h3>The SPIFFE project</h3>
+            <div class="row">
+              <div class="col-4">
+                <img src="images/spiffe-logo.png" />
+                <p>github.com/spiffe/spiffe</p>
+              </div>
+              <div class="col-7">
+                <p>
+                  A set of specifications that cover how a workload should
+                  retrieve and use it's identity.
+                </p>
+                <ul>
+                  <li>SPIFFE ID</li>
+                  <li>SPIFFE Verifable Identity Documents (SVIDs)</li>
+                  <li>The SPIFFE Workload API</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h3>Spire</h3>
+            <div class="row">
+              <div class="col-4">
+                <img src="images/spire-horizontal-color.png" />
+                <p>github.com/spiffe/spire</p>
+              </div>
+              <div class="col-7">
+                <p>
+                  SPIRE, the SPIFFE Runtime Environment, is an extensible system
+                  that implements the principles embodied in the SPIFFE
+                  standards. SPIRE manages platform and workload attestation,
+                  provides an API for controlling attestation policies, and
+                  coordinates certificate issuance and rotation.
+                </p>
+                <p>
+                  Apache 2.0 license. Independent governance. Highly extensible
+                  through plugins.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>SPIFFE ID</h2>
+          <p>
+            spiffe://<span class="fragment highlight-red">eaa.akamai.com</span
+            ><span class="fragment highlight-blue">/mpop/api</span>
+          </p>
+          <aside class="notes">
+            <ui>
+              <li>The trust domain corresponds to the trust root of a system.</li>
+              <li>A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure. </li>
+            </ui>
+            <ui>
+              <li>A SPIFFE ID is a string that uniquely and specifically identifies a workload. </li>
+              <li>SPIFFE IDs may also be assigned to intermediate systems that a workload runs on (such as a group of virtual machines).</li>
+              <li>SPIFFE IDs are a Uniform Resource Identifier (URI)</li>
+              <li>The workload identifier uniquely identifies a specific workload within a trust domain</li>
+            </ui>
+            </aside>
+        </section>
+        <section>
+          <h2>SPIFFE Verifiable Identity Document</h2>
+          <h4 class="spire-color">spiffe://eaa.akamai.com/mpop/api</h4>
+          <div class="row">
+            <div class="col-4">
+              <p>Typically short-lived(15m)</p>
+            </div>
+            <div class="col-4 pad-left50">
+              <img
+                width="250"
+                height="250"
+                src="images/App-Service-Certificates.svg"
+              />
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>An SVID is the document with which a workload proves its identity to a resource or caller. </li>
+              <li>An SVID is considered valid if it has been signed by an authority within the SPIFFE ID’s trust domain.</li>
+              <li>An SVID contains a single SPIFFE ID, which represents the identity of the service presenting it. It encodes the SPIFFE ID in a cryptographically-verifiable document, in one of two currently supported formats: an X.509 certificate.</li>
+              <li> X.509-SVIDs recommended to use;As tokens are susceptible(sus·cep·ti·ble) to replay attacks, in which an attacker that obtains the token in transit can use it to impersonate a workload, it is advised to use X.509-SVIDs whenever possible </li>
+            </ul>
+            </aside>
+        </section>
+        <!-- <section>
+          <h2>SPIFFE Workload API</h2>
+          <img src="images/spire-workload-api.png" />
+        </section> -->
+        <section>
+          <h2>SPIFFE Runtime Environment</h2>
+          <img src="images/spire-server-reg.png" />
+        </section>
+        <section>
+          <h2>SPIFEE Concepts</h2>
+          <h3>Server</h3>
+          <ul style="font-size: 18px">
+            <li>
+              <b>Identity Registry</b> — SPIRE server has an own identity
+              registry which keeps two coarse-grained attributes that decides
+              how the SPIFFE IDs will be issued to a workload.
+            </li>
+          </ul>
+          <h3>Agent</h3>
+          <ul style="font-size: 18px">
+            <li>
+              <b>Node Selector</b> — This defines a machine (physical or
+              virtual) where a workload can be running on. The exact type of
+              selector to be used is decided based on the infrastructure
+              provider (AWS, GCP, bare metal) that the workload is running. Eg.
+              AWS EC2 Instance ID, a serial number of a physical machine. Node
+              attestor act based on the infrastructure provider to honor their
+              selectors.
+            </li>
+            <li>
+              <b>Workload Selector</b> — This defines how to identify a process
+              as representing a workload, after the node is identified. This can
+              be described in terms of attributes of the process itself (eg.
+              Linux UID) or in terms of indirect attributes such as a kubernetes
+              namespace. The node agent is responsible to verify that a
+              particular process on a machine qualifies for its workload
+              selector. Workload attestor act based on the process attributes to
+              honor the process selectors.
+            </li>
+            <li>
+              <b>SPIRE Node Agent</b> — A process that sits on the node,
+              verifies the provenance of workloads running on the node, and
+              provides those workloads with certificates via the Workload API,
+              based on the selectors.
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>SPIRE Overview</h2>
+          <img width="700" height="500" src="images/spire_overview.png" />
+          <aside class="notes">
+            <ul>
+              <li>
+                Registration API is called by either an administrator or a third
+                party application to populate the identity registry with the
+                required SPIFFE IDs and relevant selectors.
+              </li>
+              <li>
+                Node agent gets authenticated with the SPIRE server using a
+                pre-established cryptographic key pair or based in the
+                infrastructure provider. For example in the case of AWS EC2,
+                node agent will submit the node’s Instance Identification
+                Document(IID) issued by AWS.
+              </li>
+              <li>
+                Node attestor in the SPIRE server validates the provided
+                identification document based on the used mechanism. If the AWS
+                IID is used, the relevant attestor will validate it with AWS
+                settings. Upon successful validation, SPIRE server sends back a
+                set of SPIFFE IDs that can be issued to the node along with
+                their process selector pliicies.
+              </li>
+              <li>
+                When workload start to run in the node, it first makes a call to
+                the node agent asking ‘who am I?’.
+              </li>
+              <li>
+                Based on the process selectors node agent received in the
+                previous step, and using the workload attestors, the agent
+                decides on the SPIFFE ID to be given to workload. It generates a
+                key pair based on that and sends the CSR(Certificate Signing
+                Request) to the SPIRE server.
+              </li>
+              <li>
+                SPIRE server responds to the node agent with the signed SVID for
+                the workload along with the trust bundles, indicating which
+                other loads can be trusted by this workload.
+              </li>
+              <li>
+                Upon receiving the response from SPIRE server, node agent,
+                handover the received SVID, trust bundles the generated private
+                key to the workload. This private key never leaves the node its
+                workload belongs to.
+              </li>
+            </ul>
+          </aside>
+        </section>
+        <section>
+          <section>
+            <h1>Node attestation workflow</h1>
+          </section>
+          <section>
+            <img width="700" height="500" src="images/node1.png" />
+            <aside class="notes">
+              <p>
+                Node agent authenticates to the SPIRE server, passes AWS
+                identity document.
+              </p>
+            </aside>
+          </section>
+          <section>
+            <img width="700" height="500" src="images/node2.png" />
+            <aside class="notes">
+              <p>
+                List of valid SPIFFE IDs for the node, and selectors, returned.
+              </p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Workload Attestation workflow</h1>
+          </section>
+          <section>
+            <img width="700" height="500" src="images/wattest.png" />
+            <aside class="notes">
+              <ul>
+                <li>Workload requests identity</li>
+                <li>
+                  Node agent performs an out-of-bound check of the workload
+                  process metadata, compares to known selectors
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/spiffe/spire/blob/master/doc/plugin_agent_workloadattestor_unix.md"
+                    target="_blank"
+                    >Unix</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/spiffe/spire/blob/master/doc/plugin_agent_workloadattestor_k8s.md"
+                    target="_blank"
+                    >Kubernetes</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/spiffe/spire/blob/master/doc/plugin_agent_workloadattestor_docker.md"
+                    target="_blank"
+                    >Docker</a
+                  >
+                </li>
+              </ul>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section><h1>SVID Bundle Issuance Workflow</h1></section>
+          <section>
+            <img width="700" height="500" src="images/sb1.png" />
+            <aside class="notes">
+              <ul>
+                <li>if match found, NA generates a key for the workload</li>
+                <li>
+                  NA sends certificate signing request based on that key to
+                  SPIRE Server.
+                </li>
+              </ul>
+            </aside>
+          </section>
+          <section>
+            <img width="700" height="500" src="images/sb2.png" />
+            <aside class="notes">
+              <p>
+                SPIRE server issues SVID(as well as certificates for any other
+                workload the instance should support)
+              </p>
+            </aside>
+          </section>
+          <section>
+            <img width="700" height="500" src="images/sb3.png" />
+            <aside class="notes">
+              <p>The certificate bundle returned to the workload.</p>
+            </aside>
+          </section>
+        </section>
+        <!-- <section>
+          <h2></h2>
+        </section> -->
+        <section>
+          <h1>Q&A</h1>
+        </section>
+        <section>
+          <h1>Thanks you</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="../reveal.js/dist/reveal.js"></script>
+    <script src="../reveal.js/plugin/notes/notes.js"></script>
+    <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="../reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        backgroundTransition: "convex",
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
