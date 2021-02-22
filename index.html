@@ -252,7 +252,7 @@
         </section>
         <section>
           <h3>The Svelte Template</h3>
-          <p>
+          <p class="fragment fade-up">
             The Svelte template allows us to use our own custom components in
             addition to HTML elements. The .svelte file extension is optional if
             there's no ambiguity, but the first letter of a custom component
@@ -264,30 +264,30 @@
         <section>
           <h3>The "Props"</h3>
           <ul style="font-size: 20px">
-            <li>
+            <li class="fragment fade-up">
               A common way to "control" how a child component behaves is to pass
               data into it as props (properties).
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               To accept a prop, expose a variable with export. It's important to
               use let because const is not reassignable.
             </li>
 
-            <li>Setting a prop is just like doing regular HTML.</li>
+            <li class="fragment fade-up">Setting a prop is just like doing regular HTML.</li>
           </ul>
-          <img class="fragment fade-up" src="images/svelte-templates.png" />
+          <img class="fragment fade-up" src="images/svelte-props.png" />
         </section>
         <section>
           <h3>Updating Component States</h3>
           <ul style="font-size: 20px">
-            <li>
+            <li class="fragment fade-up">
               User actions trigger events. <b class="svelte-color">on:</b> lets
               us listen to events and fire functions to update states. State
               changes will auto-update the UI.
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               Data generally flows from a parent to a child, but we can use
               <b class="svelte-color">bind:</b> to simplify the state-update
               logic by allowing two-way data flow.
@@ -298,12 +298,12 @@
         <section>
           <h3><b class="svelte-color">$:</b> Reactive Statements</h3>
           <ul>
-            <li>
+            <li class="fragment fade-up">
               "Reactive statements" are those statements marked by
               <b class="svelte-color">$:</b>.
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               Svelte analyzes which variables they depend on. When any of those
               dependencies changes, the corresponding reactive statements will
               be rerun. Very useful for declaring derived states, or triggering
@@ -315,13 +315,13 @@
         <section>
           <h3>Store</h3>
           <ul>
-            <li>
+            <li class="fragment fade-up">
               A reactive "store" makes it easy to share states across many
               components. It can exist in a separate JS file. To create a store,
               just wrap writable around a value.
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               In a component, we prefix store names with a $ in order to
               directly use or update them. Compiler magic!
             </li>
@@ -331,17 +331,17 @@
         <section>
           <h3>Conditional Rendering And Lists</h3>
           <ul>
-            <li>
+            <li class="fragment fade-up">
               We can conditionally render elements with Svelte's template via
               <b class="svelte-color">{#if}</b> and optionally
               <b class="svelte-color">{:else}</b>.
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               To render everything in a list, we have
               <b class="svelte-color">{#each}</b>.
             </li>
-            <li>
+            <li class="fragment fade-up">
               Remember to always close a block with
               <b class="svelte-color">{/if}</b> or
               <b class="svelte-color">{/each}!</b>
@@ -352,18 +352,18 @@
         <section>
           <h3>Async/Await</h3>
           <ul style="font-size: 20px">
-            <li>
+            <li class="fragment fade-up">
               It's super easy to do asynchronous stuff like API requests with
               Svelte.
             </li>
 
-            <li>
+            <li class="fragment fade-up">
               We can simply <b class="svelte-color">{#await}</b> a Promise to
               resolve, displaying a
               <em class="svelte-color">"loading"</em> placeholder before the
               result is ready.
             </li>
-            <li>
+            <li class="fragment fade-up">
               Note that we await the Promise in the template section, so no
               await keyword in <em class="svelte-color">&lt;script&gt;</em>.
             </li>
