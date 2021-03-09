@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>gRPC</title>
+
+    <link rel="stylesheet" href="../reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="../reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="../reveal.js/dist/theme/white.css" />
+    <link rel="stylesheet" href="styles/theme.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="styles/dracula.css" id="highlight-theme" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>gRPC</h1>
+        </section>
+        <section>
+          <section>
+            <h2>Short History</h2>
+          </section>
+          <section>
+            <h2>gRPC - History</h2>
+            <ul>
+              <li class="fragment fade-up">
+                successor to Google's internal framework "stubby"
+              </li>
+              <li class="fragment fade-up">developed by Google and Square</li>
+              <li class="fragment fade-up">
+                Version 1.0 (first stable) released on August 23, 2016
+              </li>
+              <li class="fragment fade-up">now at version 1.33</li>
+              <li class="fragment fade-up">
+                project joined CNCF (Cloud Native Computing Foundation) on March
+                1, 2017
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>In a nutshell</h2>
+            <ul>
+              <li class="fragment fade-up">
+                Remote Procedure Call
+                <ul>
+                  <li class="fragment fade-up">
+                    execute a procedure of another program located in other
+                    machine
+                  </li>
+                  <li class="fragment fade-up">
+                    without the developer explicitly coding the details for the
+                    remote interaction
+                  </li>
+                  <li class="fragment fade-up">
+                    The client and server codes can be written in different
+                    languages
+                  </li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">
+                describe services and exchanges messages using an IDL (Interface
+                Description Language)
+              </li>
+              <li class="fragment fade-up">gRPC uses proto3 syntax as IDL</li>
+              <li class="fragment fade-up">
+                protocol buffers: serialization (binary) format
+              </li>
+              <li class="fragment fade-up">
+                generate source code (in multiple languages) based on IDL
+              </li>
+              <li class="fragment fade-up">
+                server side: implement generated interfaces
+              </li>
+              <li class="fragment fade-up">
+                client side: use stubs to call services
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Benefits: efficiency</h2>
+            <ul>
+              <li class="fragment fade-up">
+                protobuf binary format - compared to JSON:
+                <ul>
+                  <li class="fragment fade-up">smaller messages</li>
+                  <li class="fragment fade-up">
+                    fast transportation and fast deserialization
+                  </li>
+                  <li class="fragment fade-up">
+                    deserialization requires less CPU power (than parsing)
+                  </li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">
+                HTTP/2 based transport
+                <ul>
+                  <li class="fragment fade-up">
+                    connection multiplexing, bi-directional streaming
+                  </li>
+                  <li class="fragment fade-up">header compression</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Benefits: usability</h2>
+            <ul>
+              <li class="fragment fade-up">
+                declarative service description via IDL
+              </li>
+              <li class="fragment fade-up">
+                code generation
+                <ul>
+                  <li class="fragment fade-up">
+                    no need to write boiler-plate code
+                  </li>
+                  <li class="fragment fade-up">
+                    no more misspelled field names or wrong types (type-safety
+                    FTW!)
+                  </li>
+                  <li class="fragment fade-up">
+                    easier to work with new/unknown APIs: use your IDEs
+                    auto-completion to explore methods
+                  </li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">
+                good support for versioning and evolving services
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>How gRPC Works</h2>
+            <ul>
+              <li class="fragment fade-up">
+                Client has a stub that provides the same methods as the server
+              </li>
+              <li class="fragment fade-up">
+                The stub calls gRPC framework under the hood to exchange the
+                information over network
+              </li>
+              <li class="fragment fade-up">
+                Client and Server use stubs to interact with each other, so they
+                only need to implement their core service logic
+              </li>
+            </ul>
+            <img class="fragment fade-up"src="images/grpc-how.svg" />
+            <br>
+            <p>The image source from: https://grpc.io/docs/what-is-grpc/introduction/</p>
+          </section>
+          
+        </section>
+        <section>
+          <section>
+            <h2>How stubs are generated?</h2>
+            <ul>
+              <li>
+                API contracts description
+                <ul>
+                  <li>
+                    The services and payload messages are defined using Protocol Buffer.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <pre><code data-trim data-noescape data-line-numbers="1|3-5|7-9|11-13">
+              syntax = "proto3"
+
+              message HelloRequest {
+                string name = 1;
+              }
+
+              message HelloResponse {
+                string greet = 1;
+              }
+
+              rpc WelcomeService {
+                rpc Hello(HelloRequest) returns (HelloResponse)
+              }
+            </code></pre>
+          </section>
+          <section>
+            <h2>Cont...</h2>
+            <ul>
+              <li>
+                Server and Client stubs are generated by the 
+                <ul>
+                  <li>Protocol Buffer compiler</li>
+                  <li>gRPC plugins of each languages</li>
+                </ul>
+              </li>
+            </ul>
+            <div class="row">
+            <div class="col-4">
+              <pre><code data-trim data-noescape>
+                // welcome.rs
+                // ...
+                pub struct HelloRequest {
+                  pub name: ::std::string::String,
+                }
+
+                pub struct HelloResponse {
+                  pub greet: ::std::string::String,
+                }
+
+                pub struct WelcomeServiceClient {
+                  client: ::grpcio::Client
+                }
+
+                pub trait WelcomeService {
+                  fn hello(&mut self, req: HelloRequest, sink: ::grpcio::UnarySink<HelloResponse>)
+                }
+                // ...
+
+              </code></pre>
+            </div>
+            <div class="col-4">
+              <pre><code data-trim data-noescape data-line-numbers="1|3-5|7-9|11-13">
+                syntax = "proto3"
+
+                message HelloRequest {
+                  string name = 1;
+                }
+
+                message HelloResponse {
+                  string greet = 1;
+                }
+
+                rpc WelcomeService {
+                  rpc Hello(HelloRequest) returns (HelloResponse)
+                }
+              </code></pre>
+            </div>
+            <div class="col-4">
+              <pre><code data-trim data-noescape>
+                // welcome.go
+                // ...
+                type HelloRequest struct {
+                  Name: string
+                }
+
+                type HelloResponse struct {
+                  Greet:string,
+                }
+
+                type WelcomeServiceClient interface {
+                  Hello(*HelloRequest) (*HelloResponse, error)
+                }
+
+                type  WelcomeServiceServer interface{
+                  Hello(*HelloRequest) (*HelloResponse, error)
+                }
+                // ...
+              </code></pre>
+            </div>
+          </div>
+          </section>
+        </section>
+        <section>
+          <h2>Why gRPC uses Protocol Buffer?</h2>
+          <div class="row">
+            <div class="col-8">
+              <ul>
+                <li class="fragment fade-up">Human readable interface defenition language (IDL)</li>
+                <li class="fragment fade-up">Programming language interoperable
+                  <ul>
+                    <li class="fragment fade-up">
+                      Code generators for many languages
+                    </li>
+                  </ul>
+                </li>
+                <li class="fragment fade-up">Binary data representation
+                  <ul>
+                    <li class="fragment fade-up">Smaller Size</li>
+                    <li class="fragment fade-up">Faster to transport</li>
+                    <li class="fragment fade-up">More efficient to serialize / deserialize</li>
+                  </ul>
+                </li>
+                <li class="fragment fade-up">Strongly typed contract</li>
+                <li class="fragment fade-up">Conventions for API evolution
+                  <ul>
+                    <li class="fragment fade-up">Backward & Forward compatibility</li>
+                  </ul>
+                </li>
+                <li class="fragment fade-up">Alternative options
+                  <ul>
+                    <li class="fragment fade-up"><a href="https://google.github.io/flatbuffers/" target="_blank">Google flatbuffers</a></li>
+                    <li class="fragment fade-up"><a href="https://github.com/microsoft/bond">Microsoft bond</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="col-2">
+              <img src="images/why_grpc.png">
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>What languages are supported by gRPC?</h2>
+          <ul>
+            <li class="fragment fade-up">10 officially supported languages
+              <ul>
+                <li class="fragment fade-up">Pure implementation: Go, Java, NodeJS</li>
+                <li class="fragment fade-up">Wrap C-gRPC core: C/C++, C#, Objective-C, Python, Ruby, PHP, Dart</li>
+              </ul>
+            </li>
+            <li class="fragment fade-up">Many other unofficial libraries: Swift, Rust,Typescript, Haskel, etc.</li>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h2>What makes gRPC Efficient?</h2>
+            <h4>gRPC uses HTTP/2 as its transfer protocol</h4>
+            <ul>
+              <li class="fragment fade-up">
+                Binary framing
+                <ul>
+                  <li class="fragment fade-up">More performant and robust</li>
+                  <li class="fragment fade-up">Lighter to transport, safer to decode</li>
+                  <li class="fragment fade-up">Great combination with Protocol Buffer</li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">Header compression using HPACK
+                <ul>
+                  <li class="fragment fade-up">Reduce overhead and improve performance</li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">Multiplexing
+                <ul>
+                  <li class="fragment fade-up">Send multiple requests and responses in parallel</li>
+                  <li class="fragment fade-up">over a single TCP connection</li>
+                  <li class="fragment fade-up">Reduce latency and improve network utilization</li>
+                </ul>
+              </li>
+              <li class="fragment fade-up">Server push
+                <ul>
+                  <li class="fragmentfade-up">One client request, multiple responses</li>
+                  <li class="fragmentfade-up">Reduce round-trip latency</li>
+                </ul>
+              </li>
+            </ul>
+            <br>
+            <a class="fragment fade-up" href="http://www.http2demo.io/" target="_blank">HTTP/2 Demo</a>
+          </section>
+          <section>
+            <h2>How HTTP/2 works under the hood</h2>
+            <ul>
+              <li class="fragment fade-up">Single TCP connection carries multiple bidirectional streams</li>
+              <li class="fragment fade-up">Each stream has a unique ID and carries multiple bidirectional messages</li>
+              <li class="fragment fade-up">Each message(Request/Response) is broken down into multiple binary frames.</li>
+              <li class="fragment fade-up">Frame is the smallest that carries different types of data: HEADERS, SETTINGS, PRIORITY, DATA, etc. </li>
+              <li class="fragment fade-up">Frames from different streams are interleaved and then reassembled on the other side</li>
+            </ul>
+          </section>
+          <section>
+            <!-- TODO: add http2 related images -->
+          </section>
+          <section>
+            <h2>HTTP/2 vs HTTP/1.1</h2>
+            <ul>
+              <li class="fragment fade-up">First, HTTP/2 is a binary protocol, while HTTP/1.1 is a text protocol.</li>
+              <li class="fragment fade-up">Headers are compressed in HTTP/2, while it’s plain text in HTTP/1.1</li>
+              <li class="fragment fade-up">HTTP/2 allows multiplexing, HTTP/1.1 doesn’t</li>
+              <li class="fragment fade-up">We can send multiple requests and responses in a single connection in HTTP/2, while in HTTP/1.1 we can send only 1, which means that we must create multiple TCP connections to send multiple requests.</li>
+              <li class="fragment fade-up">Server-push is possible with HTTP/2, but not in HTTP/1.1</li>
+              <li class="fragment fade-up">HTTP/2 was released recently in 2015, while HTTP/1.1 was released in 1997.</li>
+            </ul>
+            <img width="400" height="200" class="fragment fade-up" src="images/http2_connections.png">
+          </section>
+        </section>
+        <section>
+          <h2>Where gRPC is well suited to?</h2>
+          <ul>
+            <li class="fragment fade-up">
+              Microservices
+              <ul>
+                <li class="fragment fade-up">Low latency and high throughput communication</li>
+                <li class="fragment fade-up">Strong API contract</li>
+              </ul>
+            </li>
+            <li class="fragment fade-up">
+              Polyglot environments
+              <ul>
+                <li class="fragment fade-up">Code generation out of the box for many languages</li>
+              </ul>
+            </li>
+            <li class="fragment fade-up">
+              point-to-point realtime communication
+              <li class="fragment fade-up">Excellent support for bidirectional streaming</li>
+            </li>
+            <li class="fragment fade-up">
+              Network constrained environments
+              <ul>
+                <li class="fragment fade-up">Lightweight message format</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>Demo</h1>
+        </section>
+        <section>
+          <h1>Q&A</h1>
+        </section>
+        <section>
+          <h1>Thanks you</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="../reveal.js/dist/reveal.js"></script>
+    <script src="../reveal.js/plugin/notes/notes.js"></script>
+    <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="../reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        backgroundTransition: "zoom",
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
